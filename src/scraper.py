@@ -1,17 +1,12 @@
-import requests
 import pandas as pd
 
-def fetch_park_factors():
-    url = "https://www.ballparkpal.com/Park-Factors.php"
-    headers = {"User-Agent": "Mozilla/5.0"}
-    res = requests.get(url, headers=headers)
-    res.raise_for_status()
-
-    tables = pd.read_html(res.text)
-    df = tables[0]
+def fetch_fangraphs_park_factors(season=2024):
+    url = f"https://www.fangraphs.com/guts.aspx?type=pf&season={season}&teamid=0&dh=0&sort=8,1&csv=1"
+    df = pd.read_csv(url)
     return df
 
 if __name__ == "__main__":
-    df = fetch_park_factors()
+    df = fetch_fangraphs_park_factors(2024)
+    print(df.head())
     df.to_csv("../data/park_factors.csv", index=False)
-    print("✅ Park factors saved to data/park_factors.csv")
+
